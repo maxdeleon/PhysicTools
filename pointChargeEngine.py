@@ -1,7 +1,9 @@
 import math
 import numpy as np
-
-# Define Constants
+'''
+Created by Maximo Xavier DeLeon
+2/24/2021
+'''
 
 # Electrostatic Constant
 ELECTROSTATIC_CONSTANT = 8.89e9
@@ -118,7 +120,7 @@ class Space(object):
             target_charge_properties = self.charge_dict[target_charge].properties()
 
             #charge_array = np.zeros((len(sum_dict)-1, 4))
-            i = 0
+
             summed_components = [0, 0, 0]
             for point_charge in sum_dict.keys():
                 if point_charge == target_charge:
@@ -146,8 +148,6 @@ class Space(object):
                         elif target_charge_properties[axis] < point_charge_properties[axis] and not repel: # opposite sign and target charge has a lesser value on the axis than other point
                             summed_components[axis - 1] += point_charge_on_target_force[axis - 1]
                         axis += 1
-
-                    i = 0
 
 
             if not components:

@@ -1,7 +1,8 @@
 from pointChargeEngine import *
-
-
-
+'''
+Created by Maximo Xavier DeLeon
+2/24/2021
+'''
 
 # create point charges
 q1 = PointCharge(1e-9,[0.03,0.01,0.00],0)
