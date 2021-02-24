@@ -1,4 +1,4 @@
-# PhysicTools
+# PhysicsTools
 Putting concepts learned in class to use
 
 Current funtionality
