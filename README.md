@@ -1,6 +1,8 @@
 # PhysicsTools
 Putting concepts learned in class to use
 
+### by Maximo Xavier DeLeon
+
 Current funtionality
 * Calculate the electric field strength between two point charges
 * Calculate the electrostatic force between two point charges
