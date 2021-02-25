@@ -1,5 +1,7 @@
 import math
 import numpy as np
+import time
+
 '''
 Created by Maximo Xavier DeLeon
 2/24/2021
@@ -36,9 +38,13 @@ class PointCharge():
 
 
 class Space(object):
-    def __init__(self, granularity=0.001):
+    def __init__(self, granularity=0.01, buffer='auto'):
         self.charge_dict = {}
         self.granualtity = granularity
+        if buffer == 'auto':
+            self.buffer = 4 * self.granualtity
+
+
 
     def add_charge(self, charge_properties, name='CHARGE'):
         if name not in self.charge_dict.keys():
@@ -64,18 +70,66 @@ class Space(object):
     def compute_electric_field_strength(self, charge_name, point,components=False):
         global PERMITTIVITY_CONSTANT
         if charge_name in self.charge_dict.keys():
-            charge_properties = self.charge_dict[charge_name]  # get charge properties from dictionary
+
+            charge_properties = self.charge_dict[charge_name].properties()  # get charge properties from dictionary
             r = math.sqrt((charge_properties[1] - point[0]) ** 2 + (charge_properties[2] - point[1]) ** 2 + (charge_properties[3] - point[2]) ** 2)  # calculate position vector difference in R3
-            E = (1 / (4 * math.pi * PERMITTIVITY_CONSTANT)) * self.charge_dict[charge_name][0] / r ** 2
+            E = (1 / (4 * math.pi * PERMITTIVITY_CONSTANT)) * charge_properties[0] / r ** 2 if r != 0 else 0
+
             if not components:
-                return [E] + point
+                return [E]
             elif components:
-                theta_x = math.acos((charge_properties[1] - charge_properties[1]) / r)  # angle position vector makes with the x-axis
-                theta_y = math.acos((charge_properties[2] - charge_properties[2]) / r)  # angle position vector makes with the y-axis
-                theta_z = math.acos((charge_properties[3] - charge_properties[3]) / r)  # angle position vector makes with the z-axis
-                return [E*math.cos(theta_x),E*math.cos(theta_y),E*math.cos(theta_z)] + point
+                theta_x = math.acos((charge_properties[1] - charge_properties[1]) / r) if r != 0 else 0 # angle position vector makes with the x-axis
+                theta_y = math.acos((charge_properties[2] - charge_properties[2]) / r) if r != 0 else 0 # angle position vector makes with the y-axis
+                theta_z = math.acos((charge_properties[3] - charge_properties[3]) / r) if r != 0 else 0 # angle position vector makes with the z-axis
+                return [E*math.cos(theta_x),E*math.cos(theta_y),E*math.cos(theta_z)]
         else:
             print(charge_name, 'does not exist in the current space')
+
+    def compute_electrical_field_array(self, magOnly=True): # i think this creates a tensor but I am not sure ....
+        charge_data = {}
+        for charge in self.charge_dict:
+            charge_data[charge] = self.charge_dict[charge].properties()
+        charge_list = []
+        x_list = []
+        y_list = []
+        z_list = []
+        coordinate_list = [charge_list, x_list, y_list, z_list]
+        for point_charge in charge_data:
+            for axis in range(0, 4):
+                coordinate_list[axis].append(charge_data[point_charge][axis])
+
+        min_list = [min(coordinate_list[1]),min(coordinate_list[2]),min(coordinate_list[3])] # find the min values in each axis
+        max_list = [max(coordinate_list[1]),max(coordinate_list[2]),max(coordinate_list[3])] # find the max values in each axis
+
+        #min_list = np.array(min_list, dtype=float)* self.buffer # apply buffer to mins of each axis
+        #max_list = np.array(max_list, dtype=float)* self.buffer  # apply buffer to mins of each axis
+
+        size_list = [abs(max_list[0] - min_list[0]),abs(max_list[1] - min_list[1]),abs(max_list[2] - min_list[2])]
+        size_to_use = max(size_list)
+        field_calculations_per_axis = math.ceil(size_to_use/self.granualtity) # determine the field calculation for x y z
+        field_strength_matrix = np.empty((field_calculations_per_axis,field_calculations_per_axis,field_calculations_per_axis),dtype=object) # create a nxn array dependent on the space the charges take up and teh granularity
+        start_time = time.time() # start timer
+        for slab in range(field_calculations_per_axis): # get lowest slab
+            for row in range(field_calculations_per_axis):                     # get current row in slab
+                for point in range(field_calculations_per_axis):
+                    current_position = [ min_list[0] + point * self.granualtity,min_list[1] + row * self.granualtity,min_list[2] + slab * self.granualtity]
+                    superposition_field_strength = np.empty((3,1),dtype=float)
+                    for charge in charge_data:
+                        if magOnly:
+                            current_field_strength = self.compute_electric_field_strength(charge_name=charge,point=current_position,components=True)
+                        else:
+                                current_field_strength = self.compute_electric_field_strength(charge_name=charge,point=current_position,components=True)
+                        superposition_field_strength = superposition_field_strength + np.array(current_field_strength,dtype=float) # summate the field components at current point
+                    field_strength_matrix[slab][row][point] = [superposition_field_strength, current_position]
+
+        end_time = time.time()
+        print('Finished computing:', str(field_calculations_per_axis**3), 'electric field vectors in',str(end_time-start_time),'seconds.')
+        return field_strength_matrix
+
+
+
+
+
 
     def compute_electric_force(self,charge_1_name, charge_2_name,components=False):  # method could be imporoved by using numpy and returning components
         global ELECTROSTATIC_CONSTANT
@@ -155,4 +209,12 @@ class Space(object):
                 return math.sqrt(summed_components[0]**2 + summed_components[1]**2 +summed_components[2]**2)
             elif components:
                 return summed_components
+
+
+
+
+
+
+
+
 
