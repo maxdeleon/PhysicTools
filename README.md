@@ -3,6 +3,9 @@
 
 Putting concepts learned in class to use
 
+
+![picture](Point Charge Diagram.png)
+
 Current funtionality
 * Calculate the electric field strength between two point charges
 * Calculate the electrostatic force between two point charges
