@@ -11,7 +11,7 @@ q3 = PointCharge(10e-9,[0.00,0.00,0.00],0)
 point_charge_list = [q1,q2,q3]
 
 # create space object
-field_space = Space()
+field_space = Space(granularity=0.001)
 # Iterate through list of charges and add them to field space object
 for i in range(len(point_charge_list)):
     charge_name = 'q' + str(i + 1)
@@ -19,5 +19,6 @@ for i in range(len(point_charge_list)):
 
 # calculate the net force acting on the charge named q2
 print(field_space.summate_forces('q2',components=False),'N')
-
-plot_points(field_space)
+#print(field_space.compute_electrical_field_array())
+plot_electric_field(field_space)
+print(field_space.compute_electrical_field_array())
