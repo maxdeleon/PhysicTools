@@ -38,6 +38,7 @@ class PointCharge():
 class Space(object):
     def __init__(self, granularity=0.001):
         self.charge_dict = {}
+        self.granualtity = granularity
 
     def add_charge(self, charge_properties, name='CHARGE'):
         if name not in self.charge_dict.keys():
