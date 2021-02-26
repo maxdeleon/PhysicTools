@@ -22,7 +22,7 @@ def plot_points(field_space):
     ax.scatter(xs=coordinate_list[1], ys=coordinate_list[2], zs=coordinate_list[3], zdir='z', s=200, c=coordinate_list[0],cmap='seismic', depthshade=True, alpha=1)
     plt.show()
     # pick point
-
+#broken
 def plot_electric_field(field_space):
     charge_data ={}
     for point_charge in field_space.charge_dict.keys():
@@ -61,6 +61,8 @@ def plot_electric_field(field_space):
     plt.show()
     # pick point
 
+
+#broken
 def test_field(field_space):
     fig = plt.figure()
     ax = fig.gca(projection='3d')

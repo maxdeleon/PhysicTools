@@ -18,7 +18,5 @@ for i in range(len(point_charge_list)):
     field_space.add_charge(point_charge_list[i],charge_name)
 
 # calculate the net force acting on the charge named q2
-print(field_space.summate_forces('q2',components=False),'N')
-#print(field_space.compute_electrical_field_array())
-plot_electric_field(field_space)
-print(field_space.compute_electrical_field_array())
+print(field_space.summate_forces('q2',components=False),'N') # calculate net force acting on charge 2
+plot_points(field_space) # plot point charges
