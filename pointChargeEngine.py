@@ -78,6 +78,10 @@ class Space(object):
             if not components:
                 return [E]
             elif components:
+
+                # uhh
+                # need to fix whatever is wrong here. will do after assignments are finished
+
                 theta_x = math.acos((charge_properties[1] - point[0]) / r) if r != 0 else 0 # angle position vector makes with the x-axis
                 theta_y = math.acos((charge_properties[2] - point[1]) / r) if r != 0 else 0 # angle position vector makes with the y-axis
                 theta_z = math.acos((charge_properties[3] - point[2]) / r) if r != 0 else 0 # angle position vector makes with the z-axis
