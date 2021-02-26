@@ -78,9 +78,9 @@ class Space(object):
             if not components:
                 return [E]
             elif components:
-                theta_x = math.acos((charge_properties[1] - charge_properties[1]) / r) if r != 0 else 0 # angle position vector makes with the x-axis
-                theta_y = math.acos((charge_properties[2] - charge_properties[2]) / r) if r != 0 else 0 # angle position vector makes with the y-axis
-                theta_z = math.acos((charge_properties[3] - charge_properties[3]) / r) if r != 0 else 0 # angle position vector makes with the z-axis
+                theta_x = math.acos((charge_properties[1] - point[0]) / r) if r != 0 else 0 # angle position vector makes with the x-axis
+                theta_y = math.acos((charge_properties[2] - point[1]) / r) if r != 0 else 0 # angle position vector makes with the y-axis
+                theta_z = math.acos((charge_properties[3] - point[2]) / r) if r != 0 else 0 # angle position vector makes with the z-axis
                 return [E*math.cos(theta_x),E*math.cos(theta_y),E*math.cos(theta_z)]
         else:
             print(charge_name, 'does not exist in the current space')
