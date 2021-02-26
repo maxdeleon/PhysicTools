@@ -14,3 +14,6 @@ Current funtionality
 * Remove point charges
 * Create point charge objects
 
+## Contributers
+Feel free to fork this repository and make pull requests!
+
