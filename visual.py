@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from pointChargeEngine import *
+from mpl_toolkits.mplot3d.art3d import Line3DCollection
 
 
 def plot_points(field_space):
@@ -24,6 +25,8 @@ def plot_points(field_space):
     # pick point
 #broken
 def plot_electric_field(field_space):
+    fig = plt.figure()
+    ax = fig.gca(projection='3d')
     charge_data ={}
     for point_charge in field_space.charge_dict.keys():
         charge_data[point_charge] = field_space.charge_dict[point_charge].properties()
@@ -33,17 +36,27 @@ def plot_electric_field(field_space):
     u_field = np.array([])
     v_field = np.array([])
     w_field = np.array([])
-    electric_field_tensor = field_space.compute_electrical_field_array()
+    electric_field_tensor = field_space.compute_electrical_field_array(magOnly=True)
     x= len(electric_field_tensor[0][0])
     for slab in range(x):  # get lowest slab
         for row in range(x):  # get current row in slab
             for point in range(x):
-                np.append(x_field,electric_field_tensor[slab][row][point][0][0])
-                np.append(y_field,electric_field_tensor[slab][row][point][0][1])
-                np.append(z_field,electric_field_tensor[slab][row][point][0][2])
-                np.append(u_field,electric_field_tensor[slab][row][point][1][0])
+                x_field= np.append(x_field,electric_field_tensor[slab][row][point][1][0])
+                y_field= np.append(y_field,electric_field_tensor[slab][row][point][1][1])
+                z_field= np.append(z_field,electric_field_tensor[slab][row][point][1][2])
+                u_field= np.append(u_field,electric_field_tensor[slab][row][point][0][0])
 
 
+
+    '''dot_field = []
+    for vectors in u_field:
+        dot_field.append(np.dot(u_field[vectors], u_field[vectors]))
+        print(dot_field)'''
+
+
+
+    print(u_field)
+    #print(electric_field_tensor)
 
     charge_list =[]
     x_list =[]
@@ -54,10 +67,11 @@ def plot_electric_field(field_space):
         for axis in range(0,4):
             coordinate_list[axis].append(charge_data[point_charge][axis])
 
-    fig = plt.figure()
-    ax = fig.gca(projection='3d')
+
+    ax.scatter(xs=x_field, ys=y_field, zs=z_field, zdir='z', s=1,c=u_field, cmap='seismic', depthshade=True, alpha=0.3)
     ax.scatter(xs=coordinate_list[1], ys=coordinate_list[2], zs=coordinate_list[3], zdir='z', s=200, c=coordinate_list[0],cmap='seismic', depthshade=True, alpha=1)
-    ax.scatter(xs=x_field, ys=y_field, zs=z_field, zdir='z', s=20,c=u_field, cmap='seismic', depthshade=True, alpha=0.1)
+
+
     plt.show()
     # pick point
 

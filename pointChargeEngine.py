@@ -76,7 +76,7 @@ class Space(object):
             E = (1 / (4 * math.pi * PERMITTIVITY_CONSTANT)) * charge_properties[0] / r ** 2 if r != 0 else 0
 
             if not components:
-                return [E]
+                return E
             elif components:
 
                 # uhh
@@ -102,11 +102,13 @@ class Space(object):
             for axis in range(0, 4):
                 coordinate_list[axis].append(charge_data[point_charge][axis])
 
-        min_list = [min(coordinate_list[1]),min(coordinate_list[2]),min(coordinate_list[3])] # find the min values in each axis
-        max_list = [max(coordinate_list[1]),max(coordinate_list[2]),max(coordinate_list[3])] # find the max values in each axis
+        min_list = [min(coordinate_list[1]) - 2*self.granualtity,min(coordinate_list[2]) - 2*self.granualtity ,min(coordinate_list[3]) - 2*self.granualtity ] # find the min values in each axis
+        max_list = [max(coordinate_list[1])+ 2*self.granualtity,max(coordinate_list[2])+ 2*self.granualtity,max(coordinate_list[3])+ 2*self.granualtity] # find the max values in each axis
 
         #min_list = np.array(min_list, dtype=float)* self.buffer # apply buffer to mins of each axis
         #max_list = np.array(max_list, dtype=float)* self.buffer  # apply buffer to mins of each axis
+
+        print(min_list)
 
         size_list = [abs(max_list[0] - min_list[0]),abs(max_list[1] - min_list[1]),abs(max_list[2] - min_list[2])]
         size_to_use = max(size_list)
@@ -120,9 +122,9 @@ class Space(object):
                     superposition_field_strength = np.empty((3,1),dtype=float)
                     for charge in charge_data:
                         if magOnly:
-                            current_field_strength = self.compute_electric_field_strength(charge_name=charge,point=current_position,components=True)
+                            current_field_strength = self.compute_electric_field_strength(charge_name=charge,point=current_position,components= not magOnly)
                         else:
-                                current_field_strength = self.compute_electric_field_strength(charge_name=charge,point=current_position,components=True)
+                                current_field_strength = self.compute_electric_field_strength(charge_name=charge,point=current_position,components= not magOnly)
                         superposition_field_strength = superposition_field_strength + np.array(current_field_strength,dtype=float) # summate the field components at current point
                     field_strength_matrix[slab][row][point] = [superposition_field_strength, current_position]
 
