@@ -12,7 +12,7 @@ def scene_1():
     point_charge_list = [q1, q2, q3]
 
     # create space object
-    field_space = Space(granularity=0.004)
+    field_space = Space(granularity=0.002)
     # Iterate through list of charges and add them to field space object
     for i in range(len(point_charge_list)):
         charge_name = 'q' + str(i + 1)

@@ -2,7 +2,9 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from pointChargeEngine import *
 from mpl_toolkits.mplot3d.art3d import Line3DCollection
+from matplotlib import cm
 
+import numpy as np
 
 def plot_points(field_space):
     charge_data ={}
@@ -55,8 +57,6 @@ def plot_electric_field(field_space):
 
 
 
-    print(u_field)
-    #print(electric_field_tensor)
 
     charge_list =[]
     x_list =[]
@@ -67,10 +67,11 @@ def plot_electric_field(field_space):
         for axis in range(0,4):
             coordinate_list[axis].append(charge_data[point_charge][axis])
 
+    charges = ax.scatter(xs=coordinate_list[1], ys=coordinate_list[2], zs=coordinate_list[3], zdir='z', s=200, c=coordinate_list[0],cmap='seismic', depthshade=True, alpha=1)
 
-    ax.scatter(xs=x_field, ys=y_field, zs=z_field, zdir='z', s=1,c=u_field, cmap='seismic', depthshade=True, alpha=0.3)
-    ax.scatter(xs=coordinate_list[1], ys=coordinate_list[2], zs=coordinate_list[3], zdir='z', s=200, c=coordinate_list[0],cmap='seismic', depthshade=True, alpha=1)
-
+    field = ax.scatter(xs=x_field, ys=y_field, zs=z_field, zdir='z', s=1 ,c=u_field, cmap='seismic', depthshade=True, alpha=0.25)
+    plt.legend(*charges.legend_elements())
+    plt.colorbar(field)
 
     plt.show()
     # pick point
