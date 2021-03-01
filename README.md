@@ -3,7 +3,7 @@
 
 Putting concepts learned in class to use
 
-
+![picture](https://github.com/maxdeleon/PhysicsTools/blob/master/fieldplot.png)
 ![picture](https://github.com/maxdeleon/PhysicsTools/blob/master/Point%20Charge%20Diagram.png)
 
 Current funtionality
