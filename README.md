@@ -1,6 +1,6 @@
 # PhysicsTools
 ##### by Maximo Xavier DeLeon
-
+## This repository is depreciated. Please go to https://github.com/maxdeleon/PhysicsToolbox for Max's physics code stuff
 Putting concepts learned in class to use
 
 ![picture](https://github.com/maxdeleon/PhysicsTools/blob/master/fieldplot.png)
